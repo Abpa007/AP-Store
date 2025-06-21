@@ -35,6 +35,9 @@ function Navbar() {
             <Link to="/products/create" className="hover:underline">
               Create Products
             </Link>
+            <Link to="/products/create" className="hover:underline">
+              Edit Products
+            </Link>
           </>
         )}
         {token && (
