@@ -15,6 +15,7 @@ function Navbar() {
       <h1 className="text-xl font-bold">
         <Link to="/">MyApp</Link>
       </h1>
+
       <div className="space-x-4">
         {!token && (
           <>
@@ -33,13 +34,12 @@ function Navbar() {
               Products
             </Link>
             <Link to="/products/create" className="hover:underline">
-              Create Products
+              Create Product
             </Link>
-            <Link to="/products/create" className="hover:underline">
-              Edit Products
-            </Link>
+            {/* 🔁 Edit links are per-product in ProductList */}
           </>
         )}
+
         {token && (
           <button
             onClick={handleLogout}

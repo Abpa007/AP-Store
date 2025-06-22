@@ -2,25 +2,37 @@ import productModel from "../../model/productModel/productSchema.js";
 
 export const updateData = async (req, res) => {
   const { id } = req.params;
-  const body = req.body;
+  const { name, price } = req.body;
+
+  // 🔁 Use old image if no new file is uploaded
+  let image = req.body.image;
+
+  // ✅ If user uploads a new image
+  if (req.file) {
+    image = req.file.filename;
+  }
 
   try {
-    const updatedProduct = await productModel.findByIdAndUpdate(id, body, {
-      new: true, // return the updated document
-      runValidators: true, // ensure the schema validators run
-    });
+    const updatedProduct = await productModel.findByIdAndUpdate(
+      id,
+      { name, price, image },
+      {
+        new: true, // Return updated document
+        runValidators: true, // Apply Mongoose validations
+      }
+    );
 
     if (!updatedProduct) {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    return res.status(200).json({
+    res.status(200).json({
       message: "Product updated successfully",
       data: updatedProduct,
     });
   } catch (error) {
     console.error("Error updating product:", error);
-    return res.status(500).json({
+    res.status(500).json({
       message: "Failed to update product",
       error: error.message,
     });

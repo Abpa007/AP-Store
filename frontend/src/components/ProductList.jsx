@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function ProductList() {
   const navigate = useNavigate();
@@ -50,12 +50,20 @@ function ProductList() {
           {products.map((p) => (
             <div key={p._id} className="border p-4 rounded shadow">
               <img
-                src={`http://localhost:5000/uploads/${p.image}`} // ✅ image URL fixed
+                src={`http://localhost:5000/uploads/${p.image}`}
                 alt={p.name}
                 className="w-full h-40 object-cover mb-2 rounded"
               />
               <h2 className="text-lg font-semibold">{p.name}</h2>
               <p className="text-green-600 font-medium">₹{p.price}</p>
+
+              {/* ✅ Edit Button */}
+              <Link
+                to={`/products/edit/${p._id}`}
+                className="mt-2 inline-block text-sm text-blue-600 hover:underline"
+              >
+                Edit
+              </Link>
             </div>
           ))}
         </div>

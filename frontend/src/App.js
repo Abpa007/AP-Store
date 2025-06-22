@@ -1,24 +1,17 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import ProductList from "./components/ProductList";
+import EditProducts from "./components/EditProducts";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
 import CreateProducts from "./components/CreateProducts";
-
-const token = localStorage.getItem("token");
 
 function App() {
   return (
     <>
       <Navbar />
       <Routes>
-        {/* Redirect based on login status when at root ("/") */}
-        <Route
-          path="/"
-          element={<Navigate to={token ? "/products" : "/login"} replace />}
-        />
-
         {/* Public Routes */}
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
@@ -37,6 +30,14 @@ function App() {
           element={
             <ProtectedRoute>
               <CreateProducts />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/products/edit/:id"
+          element={
+            <ProtectedRoute>
+              <EditProducts />
             </ProtectedRoute>
           }
         />
