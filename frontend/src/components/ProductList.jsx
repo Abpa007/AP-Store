@@ -64,6 +64,12 @@ function ProductList() {
               >
                 Edit
               </Link>
+              <Link
+                to={`/products/delete/${p._id}`}
+                className="mt-2 inline-block text-sm text-blue-600 hover:underline"
+              >
+                Edit
+              </Link>
             </div>
           ))}
         </div>
