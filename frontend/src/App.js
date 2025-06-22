@@ -6,7 +6,6 @@ import EditProduct from "./components/EditProduct";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
 import CreateProducts from "./components/CreateProducts";
-import DeleteProduct from "./components/DeleteProduct";
 
 function App() {
   return (
@@ -38,14 +37,6 @@ function App() {
           element={
             <ProtectedRoute>
               <EditProduct />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/products/delete/:id"
-          element={
-            <ProtectedRoute>
-              <DeleteProduct />
             </ProtectedRoute>
           }
         />
