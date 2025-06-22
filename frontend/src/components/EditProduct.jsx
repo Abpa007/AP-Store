@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
-function EditProducts() {
+function EditProduct() {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -90,4 +90,4 @@ function EditProducts() {
   );
 }
 
-export default EditProducts;
+export default EditProduct;
