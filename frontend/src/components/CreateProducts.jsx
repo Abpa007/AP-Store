@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function CreateProducts() {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [image, setImage] = useState(null);
@@ -23,6 +25,7 @@ function CreateProducts() {
       setName("");
       setPrice("");
       setImage(null);
+      navigate("/products");
     } catch (error) {
       alert("Error creating product");
       console.log("Error:", error.response?.data || error.message);

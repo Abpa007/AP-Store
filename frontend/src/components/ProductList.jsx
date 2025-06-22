@@ -10,6 +10,7 @@ function ProductList() {
   const [error, setError] = useState("");
 
   // ✅ Remove deleted product from UI without refetching
+
   const removeProductFromUI = (id) => {
     setProducts((prev) => prev.filter((product) => product._id !== id));
   };
