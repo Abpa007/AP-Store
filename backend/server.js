@@ -9,11 +9,11 @@ import userRoute from "./routes/userRoute/userRoute.js";
 dotenv.config();
 
 const app = express();
-
+const allowedOrigins = ["http://localhost:3000", "http://localhost:3001"];
 // ✅ CORS: Allow requests from React (localhost:3000)
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: allowedOrigins,
     credentials: true,
   })
 );

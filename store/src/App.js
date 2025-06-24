@@ -2,10 +2,8 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import ProductList from "./components/ProductList";
-import EditProduct from "./components/EditProduct";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
-import CreateProducts from "./components/CreateProducts";
 
 function App() {
   return (
@@ -29,22 +27,6 @@ function App() {
           element={
             <ProtectedRoute>
               <ProductList />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/products/create"
-          element={
-            <ProtectedRoute>
-              <CreateProducts />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/products/edit/:id"
-          element={
-            <ProtectedRoute>
-              <EditProduct />
             </ProtectedRoute>
           }
         />

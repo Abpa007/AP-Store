@@ -1,20 +1,16 @@
 // src/components/ProductList.jsx
 import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
-import DeleteProduct from "./DeleteProduct";
 
 function ProductList() {
   const navigate = useNavigate();
+  const location = useLocation(); // Used to receive state like { shouldRefresh: true }
+
   const [products, setProducts] = useState([]);
   const [error, setError] = useState("");
 
-  // ✅ Remove deleted product from UI without refetching
-
-  const removeProductFromUI = (id) => {
-    setProducts((prev) => prev.filter((product) => product._id !== id));
-  };
-
+  // 🔁 Fetch products from backend
   useEffect(() => {
     const fetchProducts = async () => {
       const token = localStorage.getItem("token");
@@ -39,8 +35,11 @@ function ProductList() {
     };
 
     fetchProducts();
-  }, [navigate]);
+  }, [navigate]); // ✅ Re-run when 'refresh' changes
 
+  // ✅ Check if admin redirected with request to refresh
+
+  // 🛑 If there's an error, show it
   if (error) {
     return <p className="text-red-600 p-4 font-semibold">{error}</p>;
   }
@@ -62,16 +61,6 @@ function ProductList() {
               />
               <h2 className="text-lg font-semibold">{p.name}</h2>
               <p className="text-green-600 font-medium">₹{p.price}</p>
-
-              <div className="mt-2 flex space-x-4">
-                <Link
-                  to={`/products/edit/${p._id}`}
-                  className="text-blue-600 text-sm hover:underline"
-                >
-                  Edit
-                </Link>
-                <DeleteProduct id={p._id} onDelete={removeProductFromUI} />
-              </div>
             </div>
           ))}
         </div>

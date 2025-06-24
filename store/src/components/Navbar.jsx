@@ -33,9 +33,7 @@ function Navbar() {
             <Link to="/products" className="hover:underline">
               Products
             </Link>
-            <Link to="/products/create" className="hover:underline">
-              Create Product
-            </Link>
+
             {/* 🔁 Edit links are per-product in ProductList */}
           </>
         )}

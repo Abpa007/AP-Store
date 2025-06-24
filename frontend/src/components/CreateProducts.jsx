@@ -1,31 +1,40 @@
+// src/pages/CreateProducts.jsx
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function CreateProducts() {
   const navigate = useNavigate();
+
+  // Form states
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [image, setImage] = useState(null);
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Prepare form data for backend
     const formData = new FormData();
     formData.append("name", name);
     formData.append("price", price);
     formData.append("image", image);
 
     try {
+      // Send POST request to backend
       await axios.post("http://localhost:5000/api/products", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      alert("Product created");
+      // Show success, reset form, and navigate to /products with refresh flag
+      alert("Product created successfully");
       setName("");
       setPrice("");
       setImage(null);
-      navigate("/products");
+
+      // This triggers re-fetch in ProductList.jsx
+      navigate("/products", { state: { shouldRefresh: true } });
     } catch (error) {
       alert("Error creating product");
       console.log("Error:", error.response?.data || error.message);
@@ -38,8 +47,9 @@ function CreateProducts() {
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
           Create Product
         </h2>
+
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Name */}
+          {/* Name input */}
           <div>
             <label className="block mb-1 font-medium text-gray-700">
               Product Name
@@ -53,7 +63,7 @@ function CreateProducts() {
             />
           </div>
 
-          {/* Price */}
+          {/* Price input */}
           <div>
             <label className="block mb-1 font-medium text-gray-700">
               Price (₹)
@@ -67,7 +77,7 @@ function CreateProducts() {
             />
           </div>
 
-          {/* Image */}
+          {/* Image input */}
           <div>
             <label className="block mb-1 font-medium text-gray-700">
               Upload Image
@@ -81,7 +91,7 @@ function CreateProducts() {
             />
           </div>
 
-          {/* Submit */}
+          {/* Submit button */}
           <div className="text-center">
             <button
               type="submit"
