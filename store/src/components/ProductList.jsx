@@ -1,15 +1,13 @@
 // src/components/ProductList.jsx
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function ProductList() {
   const navigate = useNavigate();
-  const location = useLocation(); // Used to receive state like { shouldRefresh: true }
 
   const [products, setProducts] = useState([]);
   const [error, setError] = useState("");
-
   // 🔁 Fetch products from backend
   useEffect(() => {
     const fetchProducts = async () => {

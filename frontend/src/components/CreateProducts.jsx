@@ -34,7 +34,7 @@ function CreateProducts() {
       setImage(null);
 
       // This triggers re-fetch in ProductList.jsx
-      navigate("/products", { state: { shouldRefresh: true } });
+      navigate("/products");
     } catch (error) {
       alert("Error creating product");
       console.log("Error:", error.response?.data || error.message);
