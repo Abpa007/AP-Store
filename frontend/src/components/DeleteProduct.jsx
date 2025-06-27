@@ -26,9 +26,22 @@ function DeleteProduct({ id, onDelete }) {
   return (
     <button
       onClick={handleDelete}
-      className="text-red-600 text-sm hover:underline"
+      className="text-red-600 hover:text-red-800 transition flex items-center gap-1"
     >
-      Delete
+      <svg
+        className="w-4 h-4"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M6 7h12M10 11v6M14 11v6M5 7l1 12a2 2 0 002 2h8a2 2 0 002-2l1-12M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3"
+        />
+      </svg>
+      <span>Delete</span>
     </button>
   );
 }
