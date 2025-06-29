@@ -1,10 +1,13 @@
-// src/components/ProductList.jsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../store/CartSlice"; // Removed .jsx extension
 
 function ProductList() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [products, setProducts] = useState([]);
   const [error, setError] = useState("");
 
@@ -31,6 +34,10 @@ function ProductList() {
 
     fetchProducts();
   }, [navigate]);
+
+  const handleAddToCart = (product) => {
+    dispatch(addToCart(product));
+  };
 
   if (error) {
     return (
@@ -73,7 +80,10 @@ function ProductList() {
                   </p>
                 </div>
 
-                <button className="mt-4 flex items-center justify-center gap-2 rounded-full py-2 px-4 bg-green-600 text-white font-semibold hover:bg-green-700 shadow-lg transition duration-300">
+                <button
+                  onClick={() => handleAddToCart(p)}
+                  className="mt-4 flex items-center justify-center gap-2 rounded-full py-2 px-4 bg-green-600 text-white font-semibold hover:bg-green-700 shadow-lg transition duration-300"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-5 w-5"
