@@ -5,6 +5,7 @@ import ProductList from "./components/ProductList";
 import Cart from "./components/Cart";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
+import Checkout from "./components/Checkout";
 
 function App() {
   return (
@@ -32,6 +33,15 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/checkout"
+          element={
+            <ProtectedRoute>
+              <Checkout />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/cart"
           element={
