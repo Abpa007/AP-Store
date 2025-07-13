@@ -88,6 +88,22 @@ function Navbar() {
                 </svg>
                 Products
               </Link>
+              <Link to="/orders" className="hover:text-green-400 transition flex items-center gap-1">
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3 7h18M3 12h18M3 17h18"
+                  />
+                </svg>
+                Orders
+              </Link>
               <button
                 onClick={handleLogout}
                 className="bg-red-600 hover:bg-red-700 text-white px-4 py-1.5 rounded-lg transition flex items-center gap-2"

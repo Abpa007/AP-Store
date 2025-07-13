@@ -6,10 +6,12 @@ import EditProduct from "./components/EditProduct";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
 import CreateProducts from "./components/CreateProducts";
-
+import Order from "./components/AdminOrder";
+import { Toaster } from "react-hot-toast";
 function App() {
   return (
     <>
+      <Toaster position="top-center" />
       <Navbar />
       <Routes>
         {/* Public Routes */}
@@ -45,6 +47,14 @@ function App() {
           element={
             <ProtectedRoute>
               <EditProduct />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute>
+              <Order />
             </ProtectedRoute>
           }
         />

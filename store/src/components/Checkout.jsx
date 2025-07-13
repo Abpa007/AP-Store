@@ -2,6 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import { clearCart } from "../store/CartSlice";
 import { useNavigate } from "react-router-dom";
+import { createOrder } from "../store/OrderSlice";
 
 const Checkout = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
@@ -14,56 +15,68 @@ const Checkout = () => {
     address: "",
     phone: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setShippingInfo({ ...shippingInfo, [e.target.name]: e.target.value });
   };
 
-  const handlePlaceOrder = () => {
+  const handlePlaceOrder = async () => {
     if (!shippingInfo.name || !shippingInfo.address || !shippingInfo.phone) {
       alert("Please fill all shipping details.");
       return;
     }
+    if (cartItems.length === 0) {
+      alert("Your cart is empty.");
+      return;
+    }
 
-    // Here you would POST order to backend.
-    alert("Order placed successfully!");
-
-    dispatch(clearCart());
-    navigate("/products");
+    setLoading(true);
+    try {
+      await dispatch(
+        createOrder({ cartItems, shippingInfo, totalAmount })
+      ).unwrap();
+      alert("✅ Order placed successfully!");
+      dispatch(clearCart());
+      navigate("/products");
+    } catch (error) {
+      console.error("Error placing order:", error);
+      alert(`❌ ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-10 bg-gray-50 min-h-screen">
-      <h2 className="text-4xl font-extrabold mb-6 text-center text-gray-800">
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
         🛍️ Checkout
       </h2>
 
       {cartItems.length === 0 ? (
-        <p className="text-center text-gray-600 text-lg">Your cart is empty.</p>
+        <p className="text-center text-gray-600">Your cart is empty.</p>
       ) : (
-        <div className="max-w-3xl mx-auto space-y-6">
-          {/* Cart Summary */}
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-xl font-bold mb-4 text-gray-800">Order Summary</h3>
+        <div className="max-w-2xl mx-auto space-y-6">
+          {/* Order Summary */}
+          <div className="bg-white p-6 rounded shadow">
+            <h3 className="text-xl font-bold mb-4">Order Summary</h3>
             {cartItems.map((item) => (
-              <div key={item._id} className="flex justify-between items-center mb-2">
-                <div>
-                  <p className="font-medium">{item.name}</p>
-                  <p className="text-sm text-gray-600">
-                    {item.quantity} x ₹{item.price} = ₹{item.quantity * item.price}
-                  </p>
-                </div>
+              <div key={item._id} className="flex justify-between mb-2">
+                <span>
+                  {item.name} x {item.quantity}
+                </span>
+                <span>₹{item.quantity * item.price}</span>
               </div>
             ))}
-            <div className="border-t pt-4 mt-4 flex justify-between text-lg font-bold text-gray-800">
+            <div className="border-t pt-4 flex justify-between font-bold text-lg">
               <span>Total:</span>
               <span>₹{totalAmount}</span>
             </div>
           </div>
 
-          {/* Shipping Information */}
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-xl font-bold mb-4 text-gray-800">Shipping Information</h3>
+          {/* Shipping */}
+          <div className="bg-white p-6 rounded shadow">
+            <h3 className="text-xl font-bold mb-4">Shipping Information</h3>
             <div className="space-y-4">
               <input
                 type="text"
@@ -71,7 +84,7 @@ const Checkout = () => {
                 placeholder="Full Name"
                 value={shippingInfo.name}
                 onChange={handleChange}
-                className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring focus:ring-green-200"
+                className="w-full border p-3 rounded focus:outline-none focus:ring focus:ring-green-200"
               />
               <input
                 type="text"
@@ -79,7 +92,7 @@ const Checkout = () => {
                 placeholder="Address"
                 value={shippingInfo.address}
                 onChange={handleChange}
-                className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring focus:ring-green-200"
+                className="w-full border p-3 rounded focus:outline-none focus:ring focus:ring-green-200"
               />
               <input
                 type="text"
@@ -87,14 +100,19 @@ const Checkout = () => {
                 placeholder="Phone Number"
                 value={shippingInfo.phone}
                 onChange={handleChange}
-                className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring focus:ring-green-200"
+                className="w-full border p-3 rounded focus:outline-none focus:ring focus:ring-green-200"
               />
             </div>
             <button
               onClick={handlePlaceOrder}
-              className="mt-6 w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg transition"
+              disabled={loading}
+              className={`mt-6 w-full ${
+                loading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-green-600 hover:bg-green-700"
+              } text-white py-3 rounded transition font-semibold`}
             >
-              Place Order
+              {loading ? "Placing Order..." : "Place Order"}
             </button>
           </div>
         </div>
