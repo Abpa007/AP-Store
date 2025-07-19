@@ -1,4 +1,4 @@
-// src/components/AdminOrders.jsx
+// Updated AdminOrders.jsx with paymentMethod display
 
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -102,6 +102,7 @@ const AdminOrders = () => {
                 <th className="p-3">Phone</th>
                 <th className="p-3">Address</th>
                 <th className="p-3">Amount</th>
+                <th className="p-3">Payment</th> {/* Added Payment column */}
                 <th className="p-3">Items</th>
                 <th className="p-3">Status</th>
                 <th className="p-3">Date</th>
@@ -122,6 +123,9 @@ const AdminOrders = () => {
                   </td>
                   <td className="p-3 font-semibold text-green-700">
                     ₹{order.totalAmount}
+                  </td>
+                  <td className="p-3 font-medium text-blue-700">
+                    {order.paymentMethod} {/* Display paymentMethod */}
                   </td>
                   <td className="p-3 space-y-1">
                     {order.cartItems.map((item) => (

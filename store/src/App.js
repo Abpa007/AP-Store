@@ -6,7 +6,8 @@ import Cart from "./components/Cart";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
 import Checkout from "./components/Checkout";
-
+import PaymentPage from "./components/PaymentPage";
+import ThankYou from "./components/ThankYou";
 function App() {
   return (
     <>
@@ -47,6 +48,22 @@ function App() {
           element={
             <ProtectedRoute>
               <Cart />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/payment"
+          element={
+            <ProtectedRoute>
+              <PaymentPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/thank-you"
+          element={
+            <ProtectedRoute>
+              <ThankYou />
             </ProtectedRoute>
           }
         />

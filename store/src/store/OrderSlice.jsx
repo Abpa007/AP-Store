@@ -7,10 +7,10 @@ export const fetchOrders = createAsyncThunk("orders/fetchOrders", async () => {
   return data;
 });
 
-// ✅ Create order (POST)
+// ✅ Create order (POST) with paymentMethod included
 export const createOrder = createAsyncThunk(
   "orders/createOrder",
-  async ({ cartItems, shippingInfo, totalAmount }) => {
+  async ({ cartItems, shippingInfo, totalAmount, paymentMethod }) => {
     const response = await fetch("http://localhost:5000/api/orders", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -18,6 +18,7 @@ export const createOrder = createAsyncThunk(
         cartItems,
         shippingInfo,
         totalAmount,
+        paymentMethod, // ✅ now included
       }),
     });
     const data = await response.json();
@@ -53,7 +54,7 @@ const orderSlice = createSlice({
       })
       .addCase(createOrder.fulfilled, (state, action) => {
         state.loading = false;
-        state.orders.push(action.payload); // add the newly created order
+        state.orders.push(action.payload.order); // ✅ add the created order correctly
       })
       .addCase(createOrder.rejected, (state, action) => {
         state.loading = false;
