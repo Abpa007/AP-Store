@@ -1,12 +1,27 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { addToCart } from "../store/CartSlice";
 
 function Navbar() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const token = localStorage.getItem("token");
 
   // Dynamically get total quantity from Redux store
   const cartCount = useSelector((state) => state.cart.totalQuantity);
+
+  // ✅ Hydrate cart from localStorage on refresh
+  useEffect(() => {
+    const storedCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+    if (storedCartItems.length > 0) {
+      storedCartItems.forEach((item) => {
+        for (let i = 0; i < item.quantity; i++) {
+          dispatch(addToCart(item)); // repopulate Redux store accurately
+        }
+      });
+    }
+  }, [dispatch]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");

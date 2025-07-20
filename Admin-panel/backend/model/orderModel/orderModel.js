@@ -20,7 +20,8 @@ const orderSchema = new mongoose.Schema(
       phone: { type: String, required: true },
     },
     totalAmount: { type: Number, required: true },
-    paymentMethod: { // ✅ Added field
+    paymentMethod: {
+      // ✅ Added field
       type: String,
       enum: ["COD", "QR"],
       required: true,
