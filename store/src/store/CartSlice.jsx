@@ -1,21 +1,24 @@
+// src/store/CartSlice.js
+
 import { createSlice } from "@reduxjs/toolkit";
 
-// ✅ Load cart from localStorage if available
-const storedCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-const storedTotalQuantity =
-  parseInt(localStorage.getItem("totalQuantity")) || 0;
-const storedTotalAmount = parseFloat(localStorage.getItem("totalAmount")) || 0;
-
 const initialState = {
-  cartItems: storedCartItems,
-  totalQuantity: storedTotalQuantity,
-  totalAmount: storedTotalAmount,
+  cartItems: [],
+  totalQuantity: 0,
+  totalAmount: 0,
 };
 
 const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
+    // Hydrate cart from localStorage on app load
+    hydrateCart: (state, action) => {
+      state.cartItems = action.payload.cartItems;
+      state.totalQuantity = action.payload.totalQuantity;
+      state.totalAmount = action.payload.totalAmount;
+    },
+
     addToCart: (state, action) => {
       const item = action.payload;
       const existingItem = state.cartItems.find((i) => i._id === item._id);
@@ -23,16 +26,13 @@ const cartSlice = createSlice({
       if (existingItem) {
         existingItem.quantity += 1;
       } else {
-        state.cartItems.push({
-          ...item,
-          quantity: 1,
-        });
+        state.cartItems.push({ ...item, quantity: 1 });
       }
 
       state.totalQuantity += 1;
       state.totalAmount += item.price;
 
-      // ✅ Save to localStorage
+      // Sync to localStorage
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
       localStorage.setItem("totalQuantity", state.totalQuantity.toString());
       localStorage.setItem("totalAmount", state.totalAmount.toString());
@@ -48,7 +48,7 @@ const cartSlice = createSlice({
         state.cartItems = state.cartItems.filter((i) => i._id !== id);
       }
 
-      // ✅ Save to localStorage
+      // Sync to localStorage
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
       localStorage.setItem("totalQuantity", state.totalQuantity.toString());
       localStorage.setItem("totalAmount", state.totalAmount.toString());
@@ -59,7 +59,7 @@ const cartSlice = createSlice({
       state.totalQuantity = 0;
       state.totalAmount = 0;
 
-      // ✅ Remove from localStorage
+      // Remove from localStorage
       localStorage.removeItem("cartItems");
       localStorage.removeItem("totalQuantity");
       localStorage.removeItem("totalAmount");
@@ -67,5 +67,6 @@ const cartSlice = createSlice({
   },
 });
 
-export const { addToCart, removeFromCart, clearCart } = cartSlice.actions;
+export const { hydrateCart, addToCart, removeFromCart, clearCart } =
+  cartSlice.actions;
 export default cartSlice.reducer;

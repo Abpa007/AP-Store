@@ -1,15 +1,23 @@
 import { useSelector, useDispatch } from "react-redux";
-import { removeFromCart } from "../store/CartSlice";
-import { useNavigate } from "react-router-dom";
+import { removeFromCart, clearCart } from "../store/CartSlice";
+import { useNavigate, Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Cart = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const cartItems = useSelector((state) => state.cart.cartItems);
   const totalAmount = useSelector((state) => state.cart.totalAmount);
-  const dispatch = useDispatch();
 
   const handleRemove = (id) => {
     dispatch(removeFromCart(id));
+    toast.success("Removed from cart ✅");
+  };
+
+  const handleClearCart = () => {
+    dispatch(clearCart());
+    toast.success("Cart cleared ✅");
   };
 
   return (
@@ -19,7 +27,15 @@ const Cart = () => {
       </h2>
 
       {cartItems.length === 0 ? (
-        <p className="text-center text-gray-600 text-lg">Your cart is empty.</p>
+        <div className="text-center">
+          <p className="text-gray-600 text-lg mb-4">Your cart is empty.</p>
+          <Link
+            to="/products"
+            className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg text-lg font-semibold transition"
+          >
+            Continue Shopping
+          </Link>
+        </div>
       ) : (
         <div className="max-w-4xl mx-auto space-y-4">
           {cartItems.map((item) => (
@@ -63,16 +79,26 @@ const Cart = () => {
           ))}
 
           {/* Total Amount and Checkout */}
-          <div className="text-right mt-6">
+          <div className="text-right mt-6 space-y-4">
             <h3 className="text-2xl font-bold text-gray-800">
               Total: ₹{totalAmount}
             </h3>
-            <button
-              onClick={() => navigate("/checkout")}
-              className="mt-4 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg text-lg font-semibold transition"
-            >
-              Proceed to Checkout
-            </button>
+
+            <div className="flex flex-wrap justify-end gap-3">
+              <button
+                onClick={handleClearCart}
+                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition"
+              >
+                Empty Cart
+              </button>
+
+              <button
+                onClick={() => navigate("/checkout")}
+                className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg text-lg font-semibold transition"
+              >
+                Proceed to Checkout
+              </button>
+            </div>
           </div>
         </div>
       )}

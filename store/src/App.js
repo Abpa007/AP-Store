@@ -1,4 +1,10 @@
+// src/App.jsx
+
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { Toaster } from "react-hot-toast";
+
 import Register from "./components/Register";
 import Login from "./components/Login";
 import ProductList from "./components/ProductList";
@@ -8,9 +14,32 @@ import Navbar from "./components/Navbar";
 import Checkout from "./components/Checkout";
 import PaymentPage from "./components/PaymentPage";
 import ThankYou from "./components/ThankYou";
+
+import { hydrateCart } from "./store/CartSlice";
+
 function App() {
+  const dispatch = useDispatch();
+
+  // ✅ Hydrate Redux cart state from localStorage on app load
+  useEffect(() => {
+    const storedCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+    const storedTotalQuantity =
+      parseInt(localStorage.getItem("totalQuantity")) || 0;
+    const storedTotalAmount =
+      parseFloat(localStorage.getItem("totalAmount")) || 0;
+
+    dispatch(
+      hydrateCart({
+        cartItems: storedCartItems,
+        totalQuantity: storedTotalQuantity,
+        totalAmount: storedTotalAmount,
+      })
+    );
+  }, [dispatch]);
+
   return (
     <>
+      <Toaster position="top-center" />
       <Navbar />
       <Routes>
         {/* Public Routes */}
@@ -22,7 +51,7 @@ function App() {
           path="/"
           element={
             <ProtectedRoute>
-              <Navigate to="/products" />
+              <Navigate to="/products" replace />
             </ProtectedRoute>
           }
         />
@@ -42,7 +71,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/cart"
           element={

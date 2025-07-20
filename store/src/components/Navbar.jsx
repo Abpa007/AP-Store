@@ -1,27 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
-import { addToCart } from "../store/CartSlice";
+import { useSelector } from "react-redux";
 
 function Navbar() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const token = localStorage.getItem("token");
 
-  // Dynamically get total quantity from Redux store
+  // ✅ Dynamically get total quantity from Redux store
   const cartCount = useSelector((state) => state.cart.totalQuantity);
-
-  // ✅ Hydrate cart from localStorage on refresh
-  useEffect(() => {
-    const storedCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-    if (storedCartItems.length > 0) {
-      storedCartItems.forEach((item) => {
-        for (let i = 0; i < item.quantity; i++) {
-          dispatch(addToCart(item)); // repopulate Redux store accurately
-        }
-      });
-    }
-  }, [dispatch]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -31,7 +16,7 @@ function Navbar() {
 
   return (
     <nav className="bg-gray-950 text-white shadow-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
         {/* Brand */}
         <Link
           to="/"
@@ -54,29 +39,20 @@ function Navbar() {
           Ap-Store
         </Link>
 
-        {/* Menu */}
-        <div className="flex items-center gap-6 text-sm font-medium">
+        {/* Menu - Right Aligned */}
+        <div className="flex items-center gap-4 text-sm font-medium">
           {!token ? (
             <>
-              <Link
-                to="/register"
-                className="hover:text-green-400 transition flex items-center gap-1"
-              >
+              <Link to="/register" className="hover:text-green-400 transition">
                 Register
               </Link>
-              <Link
-                to="/login"
-                className="hover:text-green-400 transition flex items-center gap-1"
-              >
+              <Link to="/login" className="hover:text-green-400 transition">
                 Login
               </Link>
             </>
           ) : (
             <>
-              <Link
-                to="/products"
-                className="hover:text-green-400 transition flex items-center gap-1"
-              >
+              <Link to="/products" className="hover:text-green-400 transition">
                 Products
               </Link>
 
@@ -100,17 +76,22 @@ function Navbar() {
                   />
                 </svg>
                 Cart
-                {cartCount > 0 && (
-                  <span className="absolute -top-2 -right-3 bg-green-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
-                    {cartCount}
-                  </span>
-                )}
+                {/* Always render badge, even if 0 */}
+                <span
+                  className={`absolute -top-2 -right-3 ${
+                    cartCount > 0
+                      ? "bg-green-500 text-white"
+                      : "bg-gray-400 text-white"
+                  } text-xs font-bold px-1.5 py-0.5 rounded-full`}
+                >
+                  {cartCount}
+                </span>
               </Link>
 
-              {/* Logout */}
+              {/* Logout Button */}
               <button
                 onClick={handleLogout}
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-1.5 rounded-full text-sm shadow-sm transition flex items-center gap-2"
+                className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-full text-sm shadow transition"
               >
                 Logout
               </button>
