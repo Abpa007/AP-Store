@@ -43,7 +43,7 @@ const Cart = () => {
           {cartItems.map((item) => (
             <div
               key={item._id}
-              className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-4 rounded-xl shadow hover:shadow-md transition-transform transform hover:scale-[1.01]"
+              className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-4 rounded-xl shadow hover:shadow-lg transition-transform transform hover:scale-[1.01]"
             >
               {/* Product Image */}
               <div className="flex-shrink-0 flex justify-center">
@@ -83,7 +83,7 @@ const Cart = () => {
             </div>
           ))}
 
-          {/* Total Amount and Checkout */}
+          {/* Total and Actions */}
           <div className="text-center sm:text-right mt-8 space-y-4">
             <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">
               Total: ₹{totalAmount}

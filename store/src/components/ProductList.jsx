@@ -7,7 +7,6 @@ import { addToCart } from "../store/CartSlice";
 function ProductList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const [products, setProducts] = useState([]);
   const [error, setError] = useState("");
 
@@ -31,7 +30,6 @@ function ProductList() {
         setTimeout(() => navigate("/login"), 2000);
       }
     };
-
     fetchProducts();
   }, [navigate]);
 
@@ -51,65 +49,45 @@ function ProductList() {
 
   return (
     <div className="p-4 sm:p-6 lg:p-10 bg-gray-50 min-h-screen">
-      <h1 className="text-4xl font-extrabold mb-10 text-center text-gray-800">
-        🛍️ Products
+      <h1 className="text-2xl sm:text-3xl font-bold mb-8 text-center text-gray-800">
+        🛒 Browse Products
       </h1>
 
       {products.length === 0 ? (
         <p className="text-gray-600 text-center text-lg">No products found.</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
           {products.map((p) => (
             <div
               key={p._id}
-              className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col"
+              className="bg-white border border-gray-200 rounded-lg shadow hover:shadow-md transition overflow-hidden flex flex-col"
             >
               <img
                 src={`http://localhost:5000/uploads/${p.image}`}
                 alt={p.name}
-                className="w-full h-56 object-cover transition-transform duration-200 hover:scale-105"
+                className="w-full h-48 object-cover"
               />
-
-              <div className="p-4 flex-1 flex flex-col justify-between">
+              <div className="p-3 flex-1 flex flex-col justify-between">
                 <div>
-                  <h2 className="text-lg font-semibold text-gray-900 line-clamp-1">
+                  <h2 className="text-base font-semibold text-gray-900 truncate">
                     {p.name}
                   </h2>
-
                   {p.description && (
-                    <div className="mt-1">
-                      <p className="text-gray-700 text-sm font-semibold">
-                        Description:
-                      </p>
-                      <p className="text-gray-600 text-sm italic line-clamp-2">
-                        {p.description}
-                      </p>
-                    </div>
+                    <p className="text-gray-600 text-sm mt-1 line-clamp-2">
+                      {p.description}
+                    </p>
                   )}
-
-                  <p className="text-green-600 font-bold text-xl mt-2">
+                  <p className="text-green-600 font-bold text-lg mt-2">
                     ₹{p.price}
                   </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Free delivery in 3-5 days
+                  </p>
                 </div>
-
                 <button
                   onClick={() => handleAddToCart(p)}
-                  className="mt-4 flex items-center justify-center gap-2 rounded-full py-2 px-4 bg-green-600 text-white font-semibold hover:bg-green-700 shadow-lg transition duration-300"
+                  className="mt-3 w-full bg-green-500 hover:bg-green-600 text-white text-sm font-medium py-1.5 rounded transition active:scale-95"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9m5-9v9m6-9v9m-4-4h4"
-                    />
-                  </svg>
                   Add to Cart
                 </button>
               </div>

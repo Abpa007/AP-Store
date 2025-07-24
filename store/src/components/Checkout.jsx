@@ -1,6 +1,4 @@
-// 🚀 FULL CLEAN IMPLEMENTATION OF SEPARATE PAYMENT FLOW
-
-// 1️⃣ Checkout Page - Collect Shipping Details
+// 🚀 CLEAN, PREMIUM E-COMMERCE CHECKOUT PAGE
 // src/pages/Checkout.jsx
 
 import { useSelector } from "react-redux";
@@ -37,43 +35,45 @@ const Checkout = () => {
   };
 
   return (
-    <div className="p-6 max-w-xl mx-auto">
-      <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
-        🚚 Checkout - Shipping Details
-      </h2>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white flex items-center justify-center px-4 py-10">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-6 sm:p-8">
+        <h2 className="text-center text-2xl sm:text-3xl font-extrabold text-gray-800 mb-6">
+          🚚 Checkout - Shipping Details
+        </h2>
 
-      <div className="space-y-4 bg-white p-6 rounded shadow">
-        <input
-          type="text"
-          name="name"
-          placeholder="Full Name"
-          value={shippingInfo.name}
-          onChange={handleChange}
-          className="w-full border p-3 rounded"
-        />
-        <input
-          type="text"
-          name="address"
-          placeholder="Address"
-          value={shippingInfo.address}
-          onChange={handleChange}
-          className="w-full border p-3 rounded"
-        />
-        <input
-          type="text"
-          name="phone"
-          placeholder="Phone Number"
-          value={shippingInfo.phone}
-          onChange={handleChange}
-          className="w-full border p-3 rounded"
-        />
+        <div className="space-y-4">
+          <input
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            value={shippingInfo.name}
+            onChange={handleChange}
+            className="w-full border border-gray-300 focus:border-emerald-500 focus:ring focus:ring-emerald-200 rounded-lg p-3 transition"
+          />
+          <input
+            type="text"
+            name="address"
+            placeholder="Address"
+            value={shippingInfo.address}
+            onChange={handleChange}
+            className="w-full border border-gray-300 focus:border-emerald-500 focus:ring focus:ring-emerald-200 rounded-lg p-3 transition"
+          />
+          <input
+            type="text"
+            name="phone"
+            placeholder="Phone Number"
+            value={shippingInfo.phone}
+            onChange={handleChange}
+            className="w-full border border-gray-300 focus:border-emerald-500 focus:ring focus:ring-emerald-200 rounded-lg p-3 transition"
+          />
 
-        <button
-          onClick={handleContinueToPayment}
-          className="bg-green-600 text-white w-full py-3 rounded font-semibold hover:bg-green-700 transition"
-        >
-          Continue to Payment
-        </button>
+          <button
+            onClick={handleContinueToPayment}
+            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-lg transition-transform transform hover:scale-105 shadow"
+          >
+            Continue to Payment
+          </button>
+        </div>
       </div>
     </div>
   );

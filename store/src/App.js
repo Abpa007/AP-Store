@@ -15,6 +15,8 @@ import Checkout from "./components/Checkout";
 import PaymentPage from "./components/PaymentPage";
 import ThankYou from "./components/ThankYou";
 import MyOrders from "./components/MyOrder";
+import Footer from "./components/Footer";
+
 import { hydrateCart } from "./store/CartSlice";
 
 function App() {
@@ -103,6 +105,7 @@ function App() {
           }
         />
       </Routes>
+      <Footer />
     </>
   );
 }

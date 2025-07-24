@@ -38,62 +38,74 @@ const PaymentPage = () => {
   };
 
   return (
-    <div className="p-6 max-w-xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4 text-center">💳 Payment</h2>
+    <div className="p-6 max-w-md mx-auto">
+      <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
+        💳 Payment
+      </h2>
 
-      <div className="bg-white p-6 rounded shadow space-y-4">
-        <p className="text-gray-700 font-medium">
-          Total Amount: <span className="font-bold">₹{totalAmount}</span>
+      <div className="bg-white p-6 rounded-xl shadow space-y-5">
+        <p className="text-lg text-gray-800 font-medium text-center">
+          Total Amount:{" "}
+          <span className="font-bold text-green-600 text-xl">
+            ₹{totalAmount}
+          </span>
         </p>
 
-        <label className="flex items-center space-x-2">
-          <input
-            type="radio"
-            name="payment"
-            value="COD"
-            checked={paymentMethod === "COD"}
-            onChange={(e) => setPaymentMethod(e.target.value)}
-          />
-          <span>Cash on Delivery</span>
-        </label>
+        <div className="space-y-3">
+          <label className="flex items-center gap-3 cursor-pointer">
+            <input
+              type="radio"
+              name="payment"
+              value="COD"
+              checked={paymentMethod === "COD"}
+              onChange={(e) => setPaymentMethod(e.target.value)}
+              className="accent-green-600"
+            />
+            <span className="text-gray-700">Cash on Delivery (COD)</span>
+          </label>
 
-        <label className="flex items-center space-x-2">
-          <input
-            type="radio"
-            name="payment"
-            value="QR"
-            checked={paymentMethod === "QR"}
-            onChange={(e) => setPaymentMethod(e.target.value)}
-          />
-          <span>Pay via QR Code</span>
-        </label>
+          <label className="flex items-center gap-3 cursor-pointer">
+            <input
+              type="radio"
+              name="payment"
+              value="QR"
+              checked={paymentMethod === "QR"}
+              onChange={(e) => setPaymentMethod(e.target.value)}
+              className="accent-green-600"
+            />
+            <span className="text-gray-700">Pay via QR Code</span>
+          </label>
+        </div>
 
         {paymentMethod === "QR" && (
-          <div className="text-center mt-4">
+          <div className="text-center mt-4 space-y-2">
             <img
               src="/qr-code.jpg"
               alt="QR Code"
-              className="w-48 h-48 mx-auto"
+              className="w-40 h-40 mx-auto rounded shadow-sm"
             />
-            <p className="text-sm text-gray-700 mt-2">
-              Please scan and complete payment, then send receipt to
-              <span className="font-bold"> WhatsApp 9406969849 </span>
+            <p className="text-sm text-gray-600">
+              Scan the QR code and complete payment. Then send your receipt to
+              <span className="font-semibold text-emerald-600">
+                {" "}
+                WhatsApp 9406969849{" "}
+              </span>
               for confirmation.
             </p>
           </div>
         )}
 
         {paymentMethod === "COD" && (
-          <p className="text-sm text-gray-700 mt-2">
-            We will send a confirmation message on your registered number after
-            placing your COD order.
+          <p className="text-sm text-gray-600 mt-2 text-center">
+            You will receive a confirmation message on your registered number
+            after placing your COD order.
           </p>
         )}
 
         <button
           onClick={handlePlaceOrder}
           disabled={loading}
-          className={`w-full py-3 rounded font-semibold text-white transition ${
+          className={`w-full py-3 rounded-lg font-semibold text-white transition ${
             loading ? "bg-gray-400" : "bg-green-600 hover:bg-green-700"
           }`}
         >
