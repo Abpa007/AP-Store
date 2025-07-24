@@ -1,25 +1,34 @@
-import { useState } from "react";
-import axios from "axios";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "../store/authSlice";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { userInfo, loading, error } = useSelector((state) => state.auth);
+
+  // ✅ Redirect if already logged in
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/");
+    }
+  }, [navigate, userInfo]);
 
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/users/register", {
-        name,
-        email,
-        password,
-      });
-      alert("Registered successfully!");
-      navigate("/login");
+      await dispatch(register({ name, email, password })).unwrap();
+      toast.success("Registered successfully!");
+      navigate("/");
     } catch (err) {
-      alert("Registration failed");
+      toast.error(err.message || "Registration failed");
     }
   };
 
@@ -33,22 +42,34 @@ function Register() {
         <input
           className="border p-2 w-full"
           placeholder="Name"
+          value={name}
           onChange={(e) => setName(e.target.value)}
+          required
         />
         <input
           className="border p-2 w-full"
           placeholder="Email"
+          type="email"
+          value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
         <input
           className="border p-2 w-full"
           type="password"
           placeholder="Password"
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
-        <button className="bg-blue-500 text-white p-2 w-full rounded hover:bg-blue-600">
-          Register
+        <button
+          type="submit"
+          disabled={loading}
+          className="bg-blue-500 text-white p-2 w-full rounded hover:bg-blue-600"
+        >
+          {loading ? "Registering..." : "Register"}
         </button>
+        {error && <p className="text-center text-red-500 text-sm">{error}</p>}
         <p className="text-center text-sm">
           Already have an account?{" "}
           <a href="/login" className="text-blue-600 hover:underline">

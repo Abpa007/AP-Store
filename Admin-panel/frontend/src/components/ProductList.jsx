@@ -1,95 +1,122 @@
+// src/components/ProductList.jsx
+
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 import DeleteProduct from "./DeleteProduct";
 
 function ProductList() {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // ✅ Remove deleted product from UI without refetching
+  // Remove deleted product from UI instantly
   const removeProductFromUI = (id) => {
     setProducts((prev) => prev.filter((product) => product._id !== id));
   };
 
   useEffect(() => {
     const fetchProducts = async () => {
+      setLoading(true);
       const token = localStorage.getItem("token");
-
       try {
         const res = await axios.get("http://localhost:5000/api/products", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
-
         if (Array.isArray(res.data.data)) {
           setProducts(res.data.data);
+          setError("");
         } else {
-          setError("Invalid product data format.");
+          setError("Unexpected data format from server.");
         }
       } catch (err) {
         console.error("Fetch error:", err);
-        setError("Could not load products. Please login again.");
+        setError("Failed to load products. Redirecting to login...");
         setTimeout(() => navigate("/login"), 2000);
+      } finally {
+        setLoading(false);
       }
     };
-
     fetchProducts();
   }, [navigate]);
 
+  if (loading) {
+    return (
+      <p className="text-center text-emerald-600 font-semibold p-4 animate-pulse">
+        Loading products...
+      </p>
+    );
+  }
+
   if (error) {
     return (
-      <p className="text-red-600 p-4 font-semibold text-center">{error}</p>
+      <p className="text-center text-red-600 font-semibold p-4">{error}</p>
     );
   }
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
-      {/* Header and Add Product Button */}
+      {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">All Products</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-800">
+          🛍️ All Products
+        </h1>
         <Link
           to="/products/create"
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm"
+          className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg transition shadow"
         >
-          + Add Product
+          ➕ Add Product
         </Link>
       </div>
 
-      {/* Product List or Empty State */}
       {products.length === 0 ? (
-        <p className="text-center text-gray-500 italic mt-10 text-lg">
+        <p className="text-center text-slate-500 italic mt-10 text-lg">
           No products found.
         </p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {products.map((p) => (
+          {products.map((product) => (
             <div
-              key={p._id}
-              className="bg-white border border-gray-200 p-4 rounded-2xl shadow-sm hover:shadow-lg transition duration-200"
+              key={product._id}
+              className="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm hover:shadow-lg transition flex flex-col"
             >
               <img
-                src={`http://localhost:5000/uploads/${p.image}`}
-                alt={p.name}
-                className="w-full h-40 object-cover mb-3 rounded-xl"
+                src={`http://localhost:5000/uploads/${product.image}`}
+                alt={product.name}
+                className="w-full h-40 object-cover rounded-xl mb-3"
               />
-              <h2 className="text-xl font-semibold text-gray-800">{p.name}</h2>
-              <p className="text-green-600 font-medium mb-4">₹{p.price}</p>
+              <h2 className="text-lg sm:text-xl font-semibold text-slate-800 line-clamp-1">
+                {product.name}
+              </h2>
 
-              <div className="flex justify-between items-center text-sm mt-auto">
-                {/* Edit Button */}
+              <p className="text-emerald-600 font-medium mt-2">
+                ₹{product.price}
+              </p>
+
+              {product.description && (
+                <div className="mt-2">
+                  <p className="text-slate-700 text-sm font-semibold mb-1">
+                    Description:
+                  </p>
+                  <p className="text-slate-600 text-sm italic line-clamp-3">
+                    {product.description}
+                  </p>
+                </div>
+              )}
+
+              <div className="mt-auto flex justify-between items-center text-sm pt-4">
                 <Link
-                  to={`/products/edit/${p._id}`}
-                  className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 font-medium transition"
+                  to={`/products/edit/${product._id}`}
+                  className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 transition font-medium"
                 >
                   <svg
+                    xmlns="http://www.w3.org/2000/svg"
                     className="w-4 h-4"
                     fill="none"
+                    viewBox="0 0 24 24"
                     stroke="currentColor"
                     strokeWidth="2"
-                    viewBox="0 0 24 24"
                   >
                     <path
                       strokeLinecap="round"
@@ -100,18 +127,18 @@ function ProductList() {
                   Edit
                 </Link>
 
-                {/* Delete Button Component */}
                 <DeleteProduct
-                  id={p._id}
+                  id={product._id}
                   onDelete={removeProductFromUI}
                   customClass="text-red-600 hover:text-red-800 font-medium transition flex items-center gap-1"
                   icon={
                     <svg
+                      xmlns="http://www.w3.org/2000/svg"
                       className="w-4 h-4"
                       fill="none"
+                      viewBox="0 0 24 24"
                       stroke="currentColor"
                       strokeWidth="2"
-                      viewBox="0 0 24 24"
                     >
                       <path
                         strokeLinecap="round"

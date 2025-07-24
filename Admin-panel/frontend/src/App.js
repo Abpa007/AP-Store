@@ -8,24 +8,22 @@ import Navbar from "./components/Navbar";
 import CreateProducts from "./components/CreateProducts";
 import Order from "./components/AdminOrder";
 import { Toaster } from "react-hot-toast";
+
 function App() {
   return (
     <>
       <Toaster position="top-center" />
       <Navbar />
+
       <Routes>
         {/* Public Routes */}
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+
+        {/* Redirect root to /products */}
+        <Route path="/" element={<Navigate to="/products" />} />
+
         {/* Protected Routes */}
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Navigate to={"/products"} />
-            </ProtectedRoute>
-          }
-        />
         <Route
           path="/products"
           element={

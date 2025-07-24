@@ -14,7 +14,7 @@ import Navbar from "./components/Navbar";
 import Checkout from "./components/Checkout";
 import PaymentPage from "./components/PaymentPage";
 import ThankYou from "./components/ThankYou";
-
+import MyOrders from "./components/MyOrder";
 import { hydrateCart } from "./store/CartSlice";
 
 function App() {
@@ -45,7 +45,6 @@ function App() {
         {/* Public Routes */}
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-
         {/* Protected Routes */}
         <Route
           path="/"
@@ -92,6 +91,14 @@ function App() {
           element={
             <ProtectedRoute>
               <ThankYou />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/my-orders"
+          element={
+            <ProtectedRoute>
+              <MyOrders />
             </ProtectedRoute>
           }
         />

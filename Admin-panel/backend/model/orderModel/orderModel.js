@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema(
   {
+    user: { // ✅ Changed from userId to user for consistency
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
     cartItems: [
       {
         _id: {
@@ -21,14 +26,13 @@ const orderSchema = new mongoose.Schema(
     },
     totalAmount: { type: Number, required: true },
     paymentMethod: {
-      // ✅ Added field
       type: String,
       enum: ["COD", "QR"],
       required: true,
     },
     status: {
       type: String,
-      enum: ["Pending", "Completed"],
+      enum: ["Pending", "Completed", "Cancelled"],
       default: "Pending",
     },
   },

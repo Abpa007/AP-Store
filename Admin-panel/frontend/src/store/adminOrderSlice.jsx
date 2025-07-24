@@ -2,38 +2,84 @@
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-// ✅ Fetch all orders for admin
+// src/store/adminOrderSlice.js
+
 export const fetchAdminOrders = createAsyncThunk(
   "adminOrders/fetchAdminOrders",
-  async () => {
-    const response = await fetch("http://localhost:5000/api/orders");
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to fetch orders");
+  async (token, { rejectWithValue }) => {
+    try {
+      const response = await fetch("http://localhost:5000/api/orders", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to fetch orders");
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
     }
-    const data = await response.json();
-    return data; // Should be an array of orders
   }
 );
 
-// ✅ Update order status to Completed
+// Similar for updateOrderStatus and deleteOrder:
 export const updateOrderStatus = createAsyncThunk(
   "adminOrders/updateOrderStatus",
-  async (orderId) => {
-    const response = await fetch(
-      `http://localhost:5000/api/orders/${orderId}/status`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: "Completed" }),
+  async ({ orderId, token, status }, { rejectWithValue }) => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/orders/${orderId}/status`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ status }), // ✅ Send status in body
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to update order status");
       }
-    );
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to update order status");
+
+      const data = await response.json();
+      return data.order;
+    } catch (error) {
+      return rejectWithValue(error.message);
     }
-    const data = await response.json();
-    return data.order; // Return the updated order
+  }
+);
+
+export const deleteOrder = createAsyncThunk(
+  "adminOrders/deleteOrder",
+  async ({ orderId, token }, { rejectWithValue }) => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/orders/${orderId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to delete order");
+      }
+
+      return orderId;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
   }
 );
 
@@ -61,7 +107,7 @@ const adminOrderSlice = createSlice({
         state.error = action.error.message;
       })
 
-      // ✅ Update order status to Completed
+      // ✅ Update order status
       .addCase(updateOrderStatus.fulfilled, (state, action) => {
         const updatedOrder = action.payload;
         state.orders = state.orders.map((order) =>
@@ -70,6 +116,17 @@ const adminOrderSlice = createSlice({
       })
       .addCase(updateOrderStatus.rejected, (state, action) => {
         state.error = action.error.message;
+      })
+
+      // ✅ Delete order
+      .addCase(deleteOrder.fulfilled, (state, action) => {
+        const deletedOrderId = action.payload;
+        state.orders = state.orders.filter(
+          (order) => order._id !== deletedOrderId
+        );
+      })
+      .addCase(deleteOrder.rejected, (state, action) => {
+        state.error = action.payload;
       });
   },
 });

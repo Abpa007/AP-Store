@@ -15,19 +15,23 @@ const allowedOrigins = ["http://localhost:3000", "http://localhost:3001"];
 app.use(
   cors({
     origin: allowedOrigins,
+    allowedHeaders: ["Authorization", "Content-Type"],
     credentials: true,
   })
 );
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
 app.use("/uploads", express.static("uploads"));
 
-// ✅ API Routes
+// API Routes
 app.use("/api/products", productRoute);
 app.use("/api/users", userRoute);
-app.use("/api/orders", orderRoutes); // ✅ Register correctly
+app.use("/api/orders", orderRoutes);
+
+app.get("/", (req, res) => {
+  res.send("Server is running!");
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

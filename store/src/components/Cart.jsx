@@ -21,80 +21,85 @@ const Cart = () => {
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-10 bg-gray-50 min-h-screen">
-      <h2 className="text-4xl font-extrabold mb-6 text-center text-gray-800">
+    <div className="px-4 py-6 sm:px-6 lg:px-10 bg-gradient-to-br from-gray-50 to-white min-h-screen">
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-6 text-center text-gray-800">
         🛒 Your Cart
       </h2>
 
       {cartItems.length === 0 ? (
-        <div className="text-center">
-          <p className="text-gray-600 text-lg mb-4">Your cart is empty.</p>
+        <div className="text-center mt-10">
+          <p className="text-gray-600 text-base sm:text-lg mb-4">
+            Your cart is empty.
+          </p>
           <Link
             to="/products"
-            className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg text-lg font-semibold transition"
+            className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-3 rounded-lg text-base sm:text-lg font-semibold transition-transform transform hover:scale-105"
           >
             Continue Shopping
           </Link>
         </div>
       ) : (
-        <div className="max-w-4xl mx-auto space-y-4">
+        <div className="max-w-5xl mx-auto space-y-5">
           {cartItems.map((item) => (
             <div
               key={item._id}
-              className="flex flex-col sm:flex-row items-center gap-4 bg-white p-4 rounded-lg shadow"
+              className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-4 rounded-xl shadow hover:shadow-md transition-transform transform hover:scale-[1.01]"
             >
               {/* Product Image */}
-              <img
-                src={`http://localhost:5000/uploads/${item.image}`}
-                alt={item.name}
-                className="w-32 h-32 object-cover rounded"
-              />
+              <div className="flex-shrink-0 flex justify-center">
+                <img
+                  src={`http://localhost:5000/uploads/${item.image}`}
+                  alt={item.name}
+                  className="w-28 h-28 sm:w-32 sm:h-32 object-cover rounded-lg border"
+                />
+              </div>
 
               {/* Product Details */}
-              <div className="flex-1">
-                <h3 className="text-lg font-semibold text-gray-900">
+              <div className="flex flex-col flex-1 text-center sm:text-left space-y-1">
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-900">
                   {item.name}
                 </h3>
-                <p className="text-gray-700 mt-1">
-                  <span className="font-semibold">Price:</span> ₹{item.price}
+                <p className="text-gray-700">
+                  <span className="font-medium">Price:</span> ₹{item.price}
                 </p>
                 <p className="text-gray-700">
-                  <span className="font-semibold">Quantity:</span>{" "}
-                  {item.quantity}
+                  <span className="font-medium">Quantity:</span> {item.quantity}
                 </p>
                 <p className="text-gray-700">
-                  <span className="font-semibold">Subtotal:</span> ₹
+                  <span className="font-medium">Subtotal:</span> ₹
                   {item.price * item.quantity}
                 </p>
               </div>
 
               {/* Remove Button */}
-              <button
-                onClick={() => handleRemove(item._id)}
-                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition"
-              >
-                Remove
-              </button>
+              <div className="flex justify-center sm:justify-end">
+                <button
+                  onClick={() => handleRemove(item._id)}
+                  className="bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-lg font-medium transition-transform transform hover:scale-105"
+                >
+                  Remove
+                </button>
+              </div>
             </div>
           ))}
 
           {/* Total Amount and Checkout */}
-          <div className="text-right mt-6 space-y-4">
-            <h3 className="text-2xl font-bold text-gray-800">
+          <div className="text-center sm:text-right mt-8 space-y-4">
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">
               Total: ₹{totalAmount}
             </h3>
 
-            <div className="flex flex-wrap justify-end gap-3">
+            <div className="flex flex-col sm:flex-row justify-center sm:justify-end gap-3">
               <button
                 onClick={handleClearCart}
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition"
+                className="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-lg font-medium transition-transform transform hover:scale-105"
               >
                 Empty Cart
               </button>
 
               <button
                 onClick={() => navigate("/checkout")}
-                className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg text-lg font-semibold transition"
+                className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg text-base sm:text-lg font-semibold transition-transform transform hover:scale-105"
               >
                 Proceed to Checkout
               </button>

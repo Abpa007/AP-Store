@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { addToCart } from "../store/CartSlice"; // Removed .jsx extension
+import { addToCart } from "../store/CartSlice";
 
 function ProductList() {
   const navigate = useNavigate();
@@ -72,10 +72,22 @@ function ProductList() {
 
               <div className="p-4 flex-1 flex flex-col justify-between">
                 <div>
-                  <h2 className="text-lg font-semibold text-gray-900 line-clamp-2">
+                  <h2 className="text-lg font-semibold text-gray-900 line-clamp-1">
                     {p.name}
                   </h2>
-                  <p className="text-green-600 font-bold text-xl mt-1">
+
+                  {p.description && (
+                    <div className="mt-1">
+                      <p className="text-gray-700 text-sm font-semibold">
+                        Description:
+                      </p>
+                      <p className="text-gray-600 text-sm italic line-clamp-2">
+                        {p.description}
+                      </p>
+                    </div>
+                  )}
+
+                  <p className="text-green-600 font-bold text-xl mt-2">
                     ₹{p.price}
                   </p>
                 </div>
