@@ -16,6 +16,11 @@ pnpm-debug.log*
 logs/
 *.log
 
+Admin-panel/frontend/.env
+store/.env
+
+**/.env
+
 # OS-specific
 .DS_Store
 Thumbs.db
