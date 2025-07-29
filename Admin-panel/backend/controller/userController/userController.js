@@ -66,6 +66,7 @@ export const userLogin = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
 export const userRegister = async (req, res) => {
   const { name, email, password, isAdmin } = req.body;
 
